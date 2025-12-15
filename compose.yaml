@@ -1,0 +1,29 @@
+version: "3.9"
+services:
+
+  config:
+    container_name: buildconf
+    build: config
+    volumes:
+      - config:/config
+
+  lab3:
+    build: lab3
+    container_name: cprog
+    volumes:
+      - build:/build
+  backend:
+    depends_on:
+      - lab3
+      - config
+    container_name: gosrv
+    build: backend
+    ports:
+      - 80:8080
+    volumes:
+      - config:/config
+      - build:/build
+
+volumes:
+  config:
+  build:
